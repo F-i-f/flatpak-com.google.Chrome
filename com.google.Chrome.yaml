@@ -87,9 +87,13 @@ modules:
   - name: chrome
     buildsystem: simple
     build-commands:
+      - ar x chrome.deb data.tar.xz
+      - rm chrome.deb
+      - mkdir /app/chrome
+      - tar -xf data.tar.xz --strip-components=4 -C /app/chrome ./opt/google/chrome
+      - rm data.tar.xz
       - install -Dm 755 chrome.sh /app/bin/chrome
-      - install -Dm 755 apply_extra.sh /app/bin/apply_extra
-      - install -Dm 755 stub_sandbox.sh /app/bin/stub_sandbox
+      - install -Dm 755 stub_sandbox.sh /app/chrome/chrome-sandbox
       - install -Dm 644 -t /app/etc cobalt.ini
       - install -Dm 644 -t /app/share/applications com.google.Chrome.desktop
       - install -Dm 644 -t /app/share/metainfo com.google.Chrome.metainfo.xml
@@ -97,17 +101,12 @@ modules:
         for icon in 16 24 32 48 64 128 256; do
           install -Dm 644 com.google.Chrome-$icon.png /app/share/icons/hicolor/${icon}x${icon}/apps/com.google.Chrome.png
         done
-
-      # For extra-data to be able to extract the .deb
-      - install -Dm 755 /{usr,app}/bin/ar
-      - cp /usr/lib/$(gcc --print-multiarch)/libbfd-*.so /app/lib
     sources:
-      - type: extra-data
+      - type: file
         # From https://dl.google.com/linux/chrome/deb/dists/stable/main/binary-amd64/Packages
         url: https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_124.0.6367.201-1_amd64.deb
         sha256: 46f41da4399645cb004a1d5bf0cd1983e02f669ac4e6a862d78b217e8d1695f1
-        size: 106980336
-        filename: chrome.deb
+        dest-filename: chrome.deb
         only-arches: [x86_64]
         x-checker-data:
           type: debian-repo
@@ -123,8 +122,6 @@ modules:
           - exit 1
       - type: file
         path: chrome.sh
-      - type: file
-        path: apply_extra.sh
       - type: file
         path: cobalt.ini
       - type: file
