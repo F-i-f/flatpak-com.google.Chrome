@@ -105,10 +105,23 @@ modules:
     sources:
       - type: file
         # From https://dl.google.com/linux/chrome/deb/dists/stable/main/binary-amd64/Packages
-        url: https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_150.0.7871.186-1_amd64.deb
-        sha256: 4193e00b6d5d5969ee63f7a69596868f546aa0e8cb077b3e0bf9cc1e2c719d00
+        url: https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_151.0.7922.71-1_amd64.deb
+        sha256: c86cafc697ecdb88259312cef47e464d1278643610500a7c9104e6bb1af3ba5c
         dest-filename: chrome.deb
         only-arches: [x86_64]
+        x-checker-data:
+          type: debian-repo
+          root: https://dl.google.com/linux/chrome/deb
+          dist: stable
+          component: main
+          package-name: google-chrome-stable
+          is-main-source: true
+      - type: file
+        # From https://dl.google.com/linux/chrome/deb/dists/stable/main/binary-arm64/Packages
+        url: https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_151.0.7922.71-1_arm64.deb
+        sha256: d8d3e1bfc92d38751154d3d30dfcb4e8c8a25e630d8a53d60b06b034b55e9aa4
+        dest-filename: chrome.deb
+        only-arches: [aarch64]
         x-checker-data:
           type: debian-repo
           root: https://dl.google.com/linux/chrome/deb
